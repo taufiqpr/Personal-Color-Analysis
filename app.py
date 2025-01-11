@@ -45,8 +45,6 @@ model_indobert = 'model'
 analyzer_indobert = SentimentAnalyzer(model_indobert)
 
 appConf = {
-    "OAUTH2_CLIENT_ID": "",
-    "OAUTH2_CLIENT_SECRET": "",
     "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
     "FLASK_SECRET": "467901b0-a75b-47fe-8971-80fd119c28c1",
     "FLASK_PORT": 5000
