@@ -44,23 +44,11 @@ app = Flask(__name__)
 model_indobert = 'model'
 analyzer_indobert = SentimentAnalyzer(model_indobert)
 
-appConf = {
-    "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
-    "FLASK_SECRET": "467901b0-a75b-47fe-8971-80fd119c28c1",
-    "FLASK_PORT": 5000
-}
 
 app.secret_key = appConf.get("FLASK_SECRET")
 
 oauth = OAuth(app)
 
-oauth.register("myApp",
-               client_id=appConf.get("OAUTH2_CLIENT_ID"),
-               client_secret=appConf.get("OAUTH2_CLIENT_SECRET"),
-               server_metadata_url=appConf.get("OAUTH2_META_URL"),
-               client_kwargs={
-                   "scope": "openid profile email https://www.googleapis.com/auth/user.birthday.read https://www.googleapis.com/auth/user.gender.read",
-               })
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/capstone'  
 app.config['SECRET_KEY'] = 'thisisasecretkey'
