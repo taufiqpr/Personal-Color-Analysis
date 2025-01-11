@@ -1,0 +1,154 @@
+{% extends "base.html" %} {% block content %}
+<div class="dashboard">
+  <div class="left-section">
+    <h1>
+      DISCOVER YOUR <br />
+      COLOR <span class="italic-text">with</span> <br />PERSONAL TOUCH
+    </h1>
+    <p>Find which colors make you look awesome and discover your Color Code</p>
+    <a href="{{ url_for('upload_file')}}" class="btn btn-transparent">Start Now <i class="fas fa-arrow-right"></i></a>
+  </div>
+  <div class="right-section">
+    <img src="{{ url_for('static', filename='images/image.png') }}" alt="Discover Your Color" />
+  </div>
+  <div id="chatbot-button" class="chatbot-button">
+    <i class="fa fa-comments"></i>
+  </div>
+
+  <!-- Modal chatbot -->
+  <div id="chatbot-modal" class="chatbot-modal">
+    <div class="chatbot-header">
+      <h4>Chatbot</h4>
+      <span id="close-chatbot" class="close-chatbot">&times;</span>
+    </div>
+    <div class="chatbot-body">
+      <div id="chat-container" class="chat-container"></div>
+      <div class="chat-input-container">
+        <input id="chat-input" type="text" placeholder="Ketik pesan..." />
+        <button id="send-message" class="send-message">Kirim</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+<div class="glow-glam-wrapper">
+  <div class="glow-glam-extra-text">
+    <h3>GLOW & GLAM</h3>
+    <p>Dapatkan tips dan trik kecantikan untuk selalu tampil memukau. Mulai dari perawatan kulit hingga inspirasi makeup
+      yang mudah diikuti, semua siap membuatmu bersinar setiap hari!</p>
+  </div>
+
+  <div class="glow-glam-container">
+    <button class="glow-glam-nav left" id="scroll-left">&#10094;</button>
+    <div class="glow-glam-carousel">
+      {% for article in articles %}
+      <div class="glow-glam-item">
+        <a href="{{ url_for('show_article', article_id=article.id) }}">
+          <img src="{{ url_for('static', filename=article.image) }}" alt="{{ article.judul }}" alt="Woman in Red" />
+        </a>
+        <div class="glow-glam-text">
+          <h3>{{ article.judul }}</h3>
+        </div>
+      </div>
+      <div class="glow-glam-item">
+        <a href="#">
+          <img src="{{ url_for('static', filename='images/group-different-shades-makeup_81048-28725.jpg') }}"
+            alt="New Product" />
+        </a>
+        <div class="glow-glam-text">
+          <h3>Cara Mengetahui Personal Color</h3>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="glow-glam-nav right" id="scroll-right">&#10095;</button>
+  </div>
+</div>
+
+{% endblock %} {% block script %}
+<script>
+  let currentIndex = 0;
+
+  const carousel = document.querySelector(".glow-glam-carousel");
+  const items = document.querySelectorAll(".glow-glam-item");
+  const itemWidth = items[0].offsetWidth + 20; // Menyesuaikan lebar item dengan margin/padding
+  const maxIndex = items.length - 3;
+
+  // Fungsi untuk scroll kiri
+  function scrollLeft() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      carousel.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+    }
+  }
+
+  // Fungsi untuk scroll kanan
+  function scrollRight() {
+    if (currentIndex < maxIndex) {
+      currentIndex++;
+      carousel.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+    }
+  }
+
+  // Menambahkan event listener pada tombol scroll
+  document.getElementById("scroll-left").addEventListener("click", scrollLeft);
+  document.getElementById("scroll-right").addEventListener("click", scrollRight);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const chatbotButton = document.getElementById("chatbot-button");
+    const chatbotModal = document.getElementById("chatbot-modal");
+    const closeChatbot = document.getElementById("close-chatbot");
+    const sendMessage = document.getElementById("send-message");
+    const chatContainer = document.getElementById("chat-container");
+    const chatInput = document.getElementById("chat-input");
+
+    chatbotModal.style.display = "none";
+
+    if (sendMessage) {
+      sendMessage.addEventListener("click", () => {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        appendMessage("user", message);
+
+        fetch("/chatbot", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ question: message })
+        })
+          .then(response => response.json())
+          .then(data => {
+            const botResponse = data.answer || "Maaf, saya tidak bisa menjawab pertanyaan Anda.";
+            appendMessage("bot", botResponse);
+          })
+          .catch(error => {
+            console.error("Error:", error);
+            appendMessage("bot", "Terjadi kesalahan saat memproses permintaan Anda.");
+          });
+
+        chatInput.value = "";
+      });
+    }
+
+    chatbotButton.addEventListener("click", () => {
+      chatbotModal.style.display = "flex";
+    });
+
+    closeChatbot.addEventListener("click", () => {
+      chatbotModal.style.display = "none";
+    });
+
+    function appendMessage(sender, message) {
+      const messageElement = document.createElement("div");
+      messageElement.classList.add(sender === "user" ? "user-message" : "bot-message");
+      messageElement.textContent = message;
+      chatContainer.appendChild(messageElement);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  });
+</script>
+{% endblock %}

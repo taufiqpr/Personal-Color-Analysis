@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleLogin.css') }}" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon.png') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Log In</h1>
+      <form method="post">
+        {{ form.hidden_tag() }}
+
+        <!-- Ganti username menjadi email -->
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter Email" required value="{{ form.email.data if form.email.data else '' }}" />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter Password" required />
+
+        <button id="login-button" type="submit">Log In</button>
+
+        <div class="or-container">
+          <div class="line"></div>
+          <div class="or">or</div>
+          <div class="line"></div>
+        </div>
+
+        <div class="google-login">
+          <a href="{{ url_for('googleLogin') }}" class="google-button">
+            <img src="{{ url_for('static', filename='images/google.png') }}" alt="Google Icon" />
+            Login dengan Google
+          </a>
+        </div>
+
+        <div class="signup-container">
+          <p>Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a></p>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

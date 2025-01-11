@@ -1,0 +1,58 @@
+{% extends "base.html" %} {% block content %}
+<div class="about-section">
+  <div class="intro">
+    <h1>Colorify</h1>
+    <p>
+      Hai! Selamat datang di <span class="highlight">Colorify</span>. Kami di sini untuk membantu kamu menemukan warna-warna yang bikin kamu makin percaya diri. Dengan teknologi pintar, kami akan mencocokkan warna terbaik yang sesuai dengan
+      undertone kulitmu. Intinya, kami ingin bikin hari-harimu lebih berwarna dan seru!
+    </p>
+  </div>
+
+  <div class="image-section">
+    <img src="{{ url_for('static', filename='images/Group 5 1.png') }}" alt="Model with Perfect Makeup" class="main-image" />
+  </div>
+</div>
+<div class="feedback-section d-flex">
+  <div class="feedback-image-container">
+    <img src="{{ url_for('static', filename='images/image 10.png') }}" alt="Diverse Faces" class="feedback-image" />
+  </div>
+  <div class="feedback-form-container">
+    <h2>Berikan Kritik & Saran Anda:</h2>
+    <form id="review-form">
+      <textarea id="reviewText" class="form-control feedback-textarea" rows="8" placeholder="Tulis kritik dan saran Anda di sini..."></textarea>
+      <button type="submit" class="btn feedback-submit-btn" id="submitButton">Kirim</button>
+    </form>
+  </div>
+</div>
+<script>
+  document.getElementById("review-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const reviewText = document.getElementById("reviewText");
+    const submitButton = document.getElementById("submitButton");
+
+    submitButton.disabled = true;
+    submitButton.innerHTML = "Submitting...";
+
+    fetch("/add_review", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: reviewText.value }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        reviewText.value = "";
+        submitButton.disabled = false;
+        submitButton.innerHTML = "Kirim";
+
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        submitButton.disabled = false;
+        submitButton.innerHTML = "Kirim";
+      });
+  });
+</script>
+{% endblock %}
