@@ -44,9 +44,6 @@ app = Flask(__name__)
 model_indobert = 'model'
 analyzer_indobert = SentimentAnalyzer(model_indobert)
 
-oauth = OAuth(app)
-
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/capstone'  
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 
