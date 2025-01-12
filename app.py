@@ -44,9 +44,6 @@ app = Flask(__name__)
 model_indobert = 'model'
 analyzer_indobert = SentimentAnalyzer(model_indobert)
 
-
-app.secret_key = appConf.get("FLASK_SECRET")
-
 oauth = OAuth(app)
 
 
