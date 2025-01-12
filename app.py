@@ -45,7 +45,6 @@ model_indobert = 'model'
 analyzer_indobert = SentimentAnalyzer(model_indobert)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/capstone'  
-app.config['SECRET_KEY'] = 'thisisasecretkey'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
